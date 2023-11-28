@@ -1,29 +1,29 @@
 import {
-  ComponentPropsWithoutRef,
-  FormEvent,
-  forwardRef,
-  useImperativeHandle,
+  type FormEvent,
+  type ComponentPropsWithoutRef,
   useRef,
-} from "react";
+  useImperativeHandle,
+  forwardRef,
+} from 'react';
 
 export type FormHandle = {
   clear: () => void;
 };
 
-type FormProps = ComponentPropsWithoutRef<"form"> & {
+type FormProps = ComponentPropsWithoutRef<'form'> & {
   onSave: (value: unknown) => void;
 };
 
 const Form = forwardRef<FormHandle, FormProps>(function Form(
   { onSave, children, ...otherProps },
-  ref,
+  ref
 ) {
   const form = useRef<HTMLFormElement>(null);
 
   useImperativeHandle(ref, () => {
     return {
       clear() {
-        console.log("CLEARING");
+        console.log('CLEARING');
         form.current?.reset();
       },
     };
@@ -36,10 +36,12 @@ const Form = forwardRef<FormHandle, FormProps>(function Form(
     const data = Object.fromEntries(formData);
     onSave(data);
   }
+
   return (
     <form onSubmit={handleSubmit} {...otherProps} ref={form}>
       {children}
     </form>
   );
 });
+
 export default Form;
